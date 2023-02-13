@@ -1,0 +1,98 @@
+name: thechefz
+description: A new Flutter project.
+
+publish_to: 'none'
+
+version: 1.0.0+1
+
+environment:
+    sdk: '>=2.19.0 <3.0.0'
+
+dependencies:
+    flutter:
+        sdk: flutter
+
+    cupertino_icons: ^1.0.2
+    firebase_core: ^2.4.1
+    firebase_auth: ^4.2.5
+    google_fonts: ^4.0.3
+    intl_phone_field: any
+    url_launcher: ^6.1.9
+    carousel_slider: ^4.2.1
+    cloud_firestore: ^4.3.2
+    flutter_launcher_icons: any
+    google_maps_flutter: ^2.2.3
+    delivery_tracker:
+    geolocator: ^9.0.2
+    geocoding: ^2.0.5
+    intl:
+    bottom_picker: ^2.0.1
+    map_pin_picker: ^0.0.1
+    get: ^4.6.5
+    order_tracker: ^0.0.2
+
+dev_dependencies:
+    flutter_test:
+        sdk: flutter
+
+    flutter_lints: ^2.0.0
+
+flutter:
+    uses-material-design: true
+
+    # To add assets to your application, add an assets section, like this:
+    assets:
+        - images/thechefz.png
+        - images/login.png
+        - images/flags/ksa.png
+        - images/flags/bah.png
+        - images/flags/jor.png
+        - images/flags/kuw.png
+        - images/flags/om.png
+        - images/flags/qtr.png
+        - images/flags/uae.png
+        - images/home/deliver.png
+        - images/home/banners/banner1.png
+        - images/home/banners/banner2.png
+        - images/home/banners/banner3.png
+        - images/home/banners/banner4.png
+        - images/home/banners/banner5.png
+        - images/home/banners/banner6.png
+        - images/home/banners/banner7.png
+        - images/home/banners/banner8.png
+        - images/otp.png
+        - images/home/servicecategories/cat1.png
+        - images/home/servicecategories/cat2.png
+        - images/home/servicecategories/cat3.png
+        - images/home/servicecategories/cat4.png
+        - images/home/foodcat/break.png
+        - images/home/foodcat/cake.png
+        - images/home/foodcat/sweets.png
+        - images/home/foodcat/winter.png
+        - images/home/foodcat/shawarma.png
+        - images/home/foodcat/pizza.png
+        - images/home/foodcat/asian.png
+        - images/home/foodcat/asian.png
+        - images/home/restaurants/wagyu.png
+        - images/home/restaurants/wagyul.png
+        - images/home/restaurants/wagyumenu/fries.png
+        - images/home/restaurants/wagyumenu/wagyuburger.png
+        - images/home/restaurants/wagyumenu/wagyufries.png
+        - images/home/restaurants/wagyumenu/classicb.png
+        - images/home/restaurants/wagyumenu/wburger.png
+        - images/home/restaurants/wagyumenu/buffalochicken.png
+        - images/home/restaurants/wagyumenu/buffaloshrimp.png
+        - images/home/restaurants/wagyumenu/dynamite.png
+        - images/home/restaurants/shiromenu/shiro.png
+        - images/home/restaurants/shiromenu/shirol.png
+        - images/home/restaurants/rawkmenu/rawk.png
+        - images/home/restaurants/rawkmenu/rawkl.png
+        - images/home/restaurants/3eggsmenu/3eggs.png
+        - images/home/restaurants/3eggsmenu/3eggsl.png
+        - images/profile/points.png
+        - images/profile/wallet.png
+        - images/cards.png
+        - images/apple.png
+        - images/contact.png
+        - images/service.png
+        - images/meal.png
