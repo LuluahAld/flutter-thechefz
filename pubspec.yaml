@@ -30,6 +30,7 @@ dependencies:
     map_pin_picker: ^0.0.1
     get: ^4.6.5
     order_tracker: ^0.0.2
+    syncfusion_flutter_pdfviewer:
 
 dev_dependencies:
     flutter_test:
@@ -85,6 +86,9 @@ flutter:
         - images/home/restaurants/wagyumenu/dynamite.png
         - images/home/restaurants/shiromenu/shiro.png
         - images/home/restaurants/shiromenu/shirol.png
+        - images/home/restaurants/shiromenu/special.png
+        - images/home/restaurants/shiromenu/crunchy.png
+        - images/home/restaurants/shiromenu/crazy.png
         - images/home/restaurants/rawkmenu/rawk.png
         - images/home/restaurants/rawkmenu/rawkl.png
         - images/home/restaurants/3eggsmenu/3eggs.png
@@ -95,4 +99,4 @@ flutter:
         - images/apple.png
         - images/contact.png
         - images/service.png
-        - images/meal.png
+        - pdf/invoice.pdf

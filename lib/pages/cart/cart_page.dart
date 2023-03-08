@@ -1,12 +1,12 @@
 import 'package:bottom_picker/bottom_picker.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:intl/intl.dart';
 import 'package:thechefz/constants.dart';
 import 'package:thechefz/models/Address.dart';
 import 'package:thechefz/models/Meal.dart';
 import 'package:thechefz/models/Order.dart';
+import 'package:thechefz/models/Restaurant.dart';
 import 'package:thechefz/models/User.dart';
 import 'package:thechefz/pages/cart/payment_page.dart';
 
@@ -40,10 +40,20 @@ class _CartPageState extends State<CartPage> {
 
   DateTime now30mins = DateTime.now().add(const Duration(minutes: 30));
   DateTime now45mins = DateTime.now().add(const Duration(minutes: 45));
+
   @override
   Widget build(BuildContext context) {
-    CameraPosition kInitialPosition =
-        const CameraPosition(target: LatLng(19.018255973653343, 72.84793849278007), zoom: 11.0, tilt: 0, bearing: 0);
+    Orders order = Orders(
+      subtotal: 0,
+      id: '',
+      time: time,
+      meals: cart,
+      rest_id: '',
+      rest_img: '',
+      rest_name: '',
+      address: '',
+      user_id: '',
+    );
 
     var subtotal = 0;
     for (var i = 0; i < cart.length; i++) {
@@ -303,62 +313,61 @@ class _CartPageState extends State<CartPage> {
                             const SizedBox(
                               width: 12,
                             ),
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text(
-                                  meal.name,
-                                  style: const TextStyle(
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.w500,
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(
+                                    meal.name,
+                                    style: const TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.w500,
+                                    ),
                                   ),
-                                ),
-                                const SizedBox(
-                                  height: 6,
-                                ),
-                                Text(
-                                  'Per dish: ${meal.price} SAR',
-                                  style: TextStyle(color: Colors.grey.shade500),
-                                ),
-                                const SizedBox(
-                                  height: 6,
-                                ),
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Text(
-                                      'Quantity: ${meal.number_of_items}',
-                                      style: const TextStyle(
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.w500,
+                                  const SizedBox(
+                                    height: 6,
+                                  ),
+                                  Text(
+                                    'Per dish: ${meal.price} SAR',
+                                    style: TextStyle(color: Colors.grey.shade500),
+                                  ),
+                                  const SizedBox(
+                                    height: 6,
+                                  ),
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Text(
+                                        'Quantity: ${meal.number_of_items}',
+                                        style: const TextStyle(
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.w500,
+                                        ),
                                       ),
-                                    ),
-                                    const SizedBox(
-                                      width: 80,
-                                    ),
-                                    Row(
-                                      children: [
-                                        const Text(
-                                          'Total: ',
-                                          style: TextStyle(
-                                            fontSize: 16,
-                                            fontWeight: FontWeight.w500,
+                                      Row(
+                                        children: [
+                                          const Text(
+                                            'Total: ',
+                                            style: TextStyle(
+                                              fontSize: 16,
+                                              fontWeight: FontWeight.w500,
+                                            ),
                                           ),
-                                        ),
-                                        Text(
-                                          '${meal.totalM} SAR',
-                                          style: TextStyle(
-                                            fontSize: 16,
-                                            color: textP,
-                                            fontWeight: FontWeight.w500,
+                                          Text(
+                                            '${meal.totalM} SAR',
+                                            style: TextStyle(
+                                              fontSize: 16,
+                                              color: textP,
+                                              fontWeight: FontWeight.w500,
+                                            ),
                                           ),
-                                        ),
-                                      ],
-                                    )
-                                  ],
-                                )
-                              ],
+                                        ],
+                                      )
+                                    ],
+                                  )
+                                ],
+                              ),
                             )
                           ],
                         ),
@@ -423,53 +432,20 @@ class _CartPageState extends State<CartPage> {
                         onTap: () {
                           var id = DateTime.now().millisecondsSinceEpoch.remainder(100000000).toString();
 
-                          Orders ordernow = Orders(subtotal: subtotal, id: id, time: time);
-                          orders.add(ordernow);
-                          for (final ordernow in orders) {
-                            final restaurantCollection = FirebaseFirestore.instance.collection('ordersall');
-                            final resDoc = restaurantCollection.doc(ordernow.id);
-                            resDoc.set(ordernow.toMap());
-                          }
-                          for (var i = 0; i < cart.length; i++) {
-                            Meal meal = Meal(
-                                id: cart[0].id,
-                                name: cart[0].name,
-                                rating: cart[0].rating,
-                                reviews: cart[0].reviews,
-                                price: cart[0].price,
-                                cat: cart[0].cat,
-                                img: cart[0].img,
-                                rest_id: cart[0].rest_id,
-                                desc: cart[0].desc,
-                                calories: cart[0].calories,
-                                totalM: cart[0].totalM,
-                                number_of_items: cart[0].number_of_items,
-                                notes: cart[0].notes,
-                                order_id: id,
-                                user_id: userNow[0].id);
-                            ordersall.add(meal);
-                          }
-                          for (final meal in ordersall) {
-                            final restaurantCollection = FirebaseFirestore.instance.collection('orders');
-                            final resDoc = restaurantCollection.doc(meal.order_id);
-                            resDoc.set(meal.toMap());
-                          }
-                          FirebaseFirestore.instance.collection('orders').snapshots().listen(
-                            (collection) {
-                              List<Meal> newList = [];
-                              for (final doc in collection.docs) {
-                                final restaurant = Meal.fromMap(doc.data());
-                                newList.add(restaurant);
-                              }
-                              ordersall = newList;
+                          for (var i = 0; i < rests.length; i++) {
+                            if (cart[0].rest_id == rests[i].id) {
+                              order = Orders(
+                                  subtotal: subtotal,
+                                  id: id,
+                                  time: time,
+                                  meals: cart,
+                                  rest_id: cart[0].rest_id,
+                                  rest_img: rests[i].img,
+                                  rest_name: rests[i].name,
+                                  address: currentadd.addressText,
+                                  user_id: userNow[0].id);
                               setState(() {});
-                            },
-                          );
-
-                          for (final res in cart) {
-                            final restaurantCollection = FirebaseFirestore.instance.collection('cart');
-                            final resDoc = restaurantCollection.doc(res.id);
-                            resDoc.delete();
+                            }
                           }
 
                           setState(() {});
@@ -477,7 +453,7 @@ class _CartPageState extends State<CartPage> {
                             context,
                             MaterialPageRoute(
                               builder: (context) => PaymentPage(
-                                ordersnow: ordernow,
+                                order: order,
                               ),
                             ),
                           );

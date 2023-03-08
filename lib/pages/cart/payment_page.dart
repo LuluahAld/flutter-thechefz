@@ -3,11 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:thechefz/constants.dart';
 import 'package:thechefz/models/Meal.dart';
 import 'package:thechefz/models/Order.dart';
-import 'package:thechefz/pages/home/main_page.dart';
+import 'package:thechefz/models/User.dart';
 
 class PaymentPage extends StatefulWidget {
-  final Orders ordersnow;
-  const PaymentPage({super.key, required this.ordersnow});
+  final Orders order;
+  const PaymentPage({super.key, required this.order});
 
   @override
   State<PaymentPage> createState() => _PaymentPageState();
@@ -228,7 +228,7 @@ class _PaymentPageState extends State<PaymentPage> {
                         children: [
                           const Text('Dishes Total: '),
                           Text(
-                            '${widget.ordersnow.subtotal} SAR',
+                            '${widget.order.subtotal} SAR',
                             style: const TextStyle(fontWeight: FontWeight.w500),
                           ),
                         ],
@@ -255,7 +255,7 @@ class _PaymentPageState extends State<PaymentPage> {
                         children: [
                           const Text('Order Total'),
                           Text(
-                            '${widget.ordersnow.subtotal + 20} SAR',
+                            '${widget.order.subtotal + 20} SAR',
                             style: const TextStyle(fontWeight: FontWeight.w500),
                           ),
                         ],
@@ -275,9 +275,21 @@ class _PaymentPageState extends State<PaymentPage> {
                         content: Text('Placed order successfully'),
                       );
 
+                      FirebaseFirestore.instance.collection('order').doc(widget.order.id).set(widget.order.toMap());
+                      for (final res in cart) {
+                        if (res.user_id == userNow[0].id) {
+                          final restaurantCollection = FirebaseFirestore.instance.collection('cart');
+                          final resDoc = restaurantCollection.doc(res.id);
+                          resDoc.delete();
+                        }
+                      }
                       setState(() {});
-                      Navigator.of(context).pushAndRemoveUntil(
-                          MaterialPageRoute(builder: (context) => const MainPage()), (Route<dynamic> route) => false);
+
+                      Navigator.of(context)
+                        ..pop()
+                        ..pop()
+                        ..pop();
+
                       ScaffoldMessenger.of(context).showSnackBar(snackBar);
                     },
                     child: Container(

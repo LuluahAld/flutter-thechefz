@@ -100,17 +100,18 @@ class _AppBarContentState extends State<AppBarContent> {
                       const SizedBox(
                         height: 80,
                       ),
-                      for (var add in Addresses) ...[
-                        if (add.user_id == userNow[0].id)
-                          AddressCard(
-                            isSelect: isSelect,
-                            add: add,
-                            onChanged: () {
-                              setState(() {});
-                              setStater(() {});
-                            },
-                          ),
-                      ],
+                      if (userNow[0].id != null)
+                        for (var add in Addresses) ...[
+                          if (add.user_id == userNow[0].id)
+                            AddressCard(
+                              isSelect: isSelect,
+                              add: add,
+                              onChanged: () {
+                                setState(() {});
+                                setStater(() {});
+                              },
+                            ),
+                        ],
                       Padding(
                         padding: const EdgeInsets.fromLTRB(22, 0, 22, 0),
                         child: InkWell(

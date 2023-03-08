@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -119,6 +120,11 @@ class _LocationAddPageState extends State<LocationAddPage> {
                         desc: descController.text,
                         user_id: userNow[0].id),
                   );
+                  for (final res in Addresses) {
+                    final restaurantCollection = FirebaseFirestore.instance.collection('address');
+                    final resDoc = restaurantCollection.doc(res.id);
+                    resDoc.set(res.toMap());
+                  }
                   widget.onChanged();
                   Navigator.pop(context);
                 },

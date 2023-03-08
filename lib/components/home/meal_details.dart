@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:thechefz/constants.dart';
 import 'package:thechefz/models/Meal.dart';
@@ -205,26 +206,57 @@ class _MealDetailsState extends State<MealDetails> {
               padding: const EdgeInsets.fromLTRB(16, 12, 16, 0),
               child: InkWell(
                 onTap: () {
-                  Meal mealadded = Meal(
-                      id: widget.meal.id,
-                      name: widget.meal.name,
-                      rating: widget.meal.rating,
-                      reviews: widget.meal.reviews,
-                      price: widget.meal.price,
-                      cat: widget.meal.cat,
-                      img: widget.meal.img,
-                      rest_id: widget.meal.rest_id,
-                      desc: widget.meal.desc,
-                      calories: widget.meal.calories,
-                      totalM: widget.meal.price * counter,
-                      number_of_items: counter,
-                      notes: notesController.text,
-                      order_id: '0',
-                      user_id: userNow[0].id);
-                  final collection = FirebaseFirestore.instance.collection('cart');
-                  collection.doc(mealadded.id).set(mealadded.toMap());
-                  setState(() {});
-                  Navigator.pop(context);
+                  List<Meal> carttemp = [];
+                  for (var i = 0; i < cart.length; i++) {
+                    if (cart[i].user_id == userNow[0].id) {
+                      carttemp.add(cart[i]);
+                    }
+                  }
+                  if (carttemp.isNotEmpty) {
+                    if (cart[0].rest_id != widget.meal.rest_id) {
+                      _showAlertDialog(context);
+                    } else {
+                      Meal mealadded = Meal(
+                          id: widget.meal.id,
+                          name: widget.meal.name,
+                          rating: widget.meal.rating,
+                          reviews: widget.meal.reviews,
+                          price: widget.meal.price,
+                          cat: widget.meal.cat,
+                          img: widget.meal.img,
+                          rest_id: widget.meal.rest_id,
+                          desc: widget.meal.desc,
+                          calories: widget.meal.calories,
+                          totalM: widget.meal.price * counter,
+                          number_of_items: counter,
+                          notes: notesController.text,
+                          user_id: userNow[0].id);
+                      final collection = FirebaseFirestore.instance.collection('cart');
+                      collection.doc(mealadded.id).set(mealadded.toMap());
+                      setState(() {});
+                      Navigator.pop(context);
+                    }
+                  } else {
+                    Meal mealadded = Meal(
+                        id: widget.meal.id,
+                        name: widget.meal.name,
+                        rating: widget.meal.rating,
+                        reviews: widget.meal.reviews,
+                        price: widget.meal.price,
+                        cat: widget.meal.cat,
+                        img: widget.meal.img,
+                        rest_id: widget.meal.rest_id,
+                        desc: widget.meal.desc,
+                        calories: widget.meal.calories,
+                        totalM: widget.meal.price * counter,
+                        number_of_items: counter,
+                        notes: notesController.text,
+                        user_id: userNow[0].id);
+                    final collection = FirebaseFirestore.instance.collection('cart');
+                    collection.doc(mealadded.id).set(mealadded.toMap());
+                    setState(() {});
+                    Navigator.pop(context);
+                  }
                 },
                 child: Container(
                   decoration: BoxDecoration(
@@ -258,6 +290,60 @@ class _MealDetailsState extends State<MealDetails> {
             )
           ],
         ),
+      ),
+    );
+  }
+
+  void _showAlertDialog(BuildContext context) {
+    showCupertinoModalPopup<void>(
+      context: context,
+      builder: (BuildContext context) => CupertinoAlertDialog(
+        title: const Text('Alert'),
+        content: const Text('Add dishes from the same chef or delete the previous cart to add this dish'),
+        actions: <CupertinoDialogAction>[
+          CupertinoDialogAction(
+            /// This parameter indicates this action is the default,
+            /// and turns the action's text to bold text.
+            isDefaultAction: true,
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            child: const Text('Dismiss'),
+          ),
+          CupertinoDialogAction(
+            /// This parameter indicates the action would perform
+            /// a destructive action such as deletion, and turns
+            /// the action's text color to red.
+            isDestructiveAction: true,
+            onPressed: () {
+              for (final res in cart) {
+                final restaurantCollection = FirebaseFirestore.instance.collection('cart');
+                final resDoc = restaurantCollection.doc(res.id);
+                resDoc.delete();
+              }
+              Meal mealadded = Meal(
+                  id: widget.meal.id,
+                  name: widget.meal.name,
+                  rating: widget.meal.rating,
+                  reviews: widget.meal.reviews,
+                  price: widget.meal.price,
+                  cat: widget.meal.cat,
+                  img: widget.meal.img,
+                  rest_id: widget.meal.rest_id,
+                  desc: widget.meal.desc,
+                  calories: widget.meal.calories,
+                  totalM: widget.meal.price * counter,
+                  number_of_items: counter,
+                  notes: notesController.text,
+                  user_id: userNow[0].id);
+              final collection = FirebaseFirestore.instance.collection('cart');
+              collection.doc(mealadded.id).set(mealadded.toMap());
+              Navigator.of(context, rootNavigator: true).pop();
+              Navigator.pop(context);
+            },
+            child: const Text('Delete Cart'),
+          ),
+        ],
       ),
     );
   }

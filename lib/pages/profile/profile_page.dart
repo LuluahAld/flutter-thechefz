@@ -56,12 +56,13 @@ class _ProfilePageState extends State<ProfilePage> {
               ),
               Row(
                 children: [
-                  Text(
-                    '${userNow[0].phoneNumber}',
-                    style: const TextStyle(
-                      fontWeight: FontWeight.w700,
+                  if (userNow.isNotEmpty)
+                    Text(
+                      '${userNow[0].phoneNumber}',
+                      style: const TextStyle(
+                        fontWeight: FontWeight.w700,
+                      ),
                     ),
-                  ),
                   const SizedBox(
                     width: 8,
                   ),
@@ -139,10 +140,9 @@ class ProfileOptions extends StatelessWidget {
           title: 'FAQ',
         ),
         InkWell(
-          onTap: () {
-            FirebaseAuth.instance.signOut();
+          onTap: () async {
+            await FirebaseAuth.instance.signOut();
             userNow.removeLast();
-
             onChanged();
           },
           child: Row(

@@ -16,8 +16,8 @@ class TheChefzApp extends StatefulWidget {
   State<TheChefzApp> createState() => _TheChefzAppState();
 }
 
-bool isLoggedIn = false;
 bool foundAddress = false;
+bool isLoggedIn = false;
 
 class _TheChefzAppState extends State<TheChefzApp> {
   //check if user is logged in
@@ -62,7 +62,7 @@ class _TheChefzAppState extends State<TheChefzApp> {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: isLoggedIn
-          ? foundAddress
+          ? Addresses.isNotEmpty
               ? const MainPage()
               : const LocationPage()
           : const LoginPage(),
@@ -70,31 +70,8 @@ class _TheChefzAppState extends State<TheChefzApp> {
   }
 
   listenToAddresses() {
-    String userid = '';
     FirebaseFirestore.instance.collection('address').snapshots().listen(
       (collection) {
-        FirebaseAuth.instance.authStateChanges().listen((user) {
-          isLoggedIn = user != null;
-          if (user != null) {
-            userid = user.uid;
-            for (var i = 0; i < Addresses.length; i++) {
-              print(userid);
-              if (Addresses[i].user_id == userid) {
-                foundAddress = true;
-                setState(() {});
-                break;
-              } else {
-                foundAddress = false;
-                setState(() {});
-              }
-            }
-
-            print('hi');
-            setState(() {});
-          }
-
-          setState(() {});
-        });
         List<Address> newList = [];
         for (final doc in collection.docs) {
           final address = Address.fromMap(doc.data());

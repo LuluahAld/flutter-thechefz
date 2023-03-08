@@ -72,13 +72,23 @@ class _MainPageState extends State<MainPage> {
 
   @override
   void dispose() {
+    controller.dispose();
+
     super.dispose();
   }
 
   Widget body = const Text('data');
-  bool foundCart = false;
+
   @override
   Widget build(BuildContext context) {
+    int count = 0;
+    for (var i = 0; i < cart.length; i++) {
+      if (cart[i].user_id == userNow[0].id) {
+        count++;
+        setState(() {});
+      }
+    }
+    bool foundCart = false;
     for (var i = 0; i < cart.length; i++) {
       if (cart[i].user_id == userNow[0].id) {
         foundCart = true;
@@ -99,7 +109,7 @@ class _MainPageState extends State<MainPage> {
         pageController: pageController,
         isSelect: isSelect,
         onChanged: () {
-          setState(() {});
+          // setState(() {});
         },
       );
     } else if (currentIndex == 1) {
@@ -147,7 +157,7 @@ class _MainPageState extends State<MainPage> {
                       shape: BoxShape.circle,
                     ),
                     child: Text(
-                      '${cart.length}',
+                      '$count',
                       style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w700),
                     ),
                   ),

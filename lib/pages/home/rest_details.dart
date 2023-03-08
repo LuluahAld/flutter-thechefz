@@ -5,6 +5,7 @@ import 'package:thechefz/components/home/menu_cat.dart';
 import 'package:thechefz/constants.dart';
 import 'package:thechefz/models/Meal.dart';
 import 'package:thechefz/models/Restaurant.dart';
+import 'package:thechefz/models/User.dart';
 import 'package:thechefz/pages/cart/cart_page.dart';
 
 class RestDetails extends StatefulWidget {
@@ -83,8 +84,15 @@ class _RestDetailsState extends State<RestDetails> {
 
   @override
   Widget build(BuildContext context) {
+    bool foundCart = false;
+    for (var i = 0; i < cart.length; i++) {
+      if (cart[i].user_id == userNow[0].id) {
+        foundCart = true;
+        setState(() {});
+      }
+    }
     Widget promo;
-    if (cart.isNotEmpty) {
+    if (foundCart) {
       cartVisible = true;
       setState(() {});
     } else {
@@ -123,6 +131,13 @@ class _RestDetailsState extends State<RestDetails> {
     } else {
       promo = const SizedBox();
     }
+    int count = 0;
+    for (var i = 0; i < cart.length; i++) {
+      if (cart[i].user_id == userNow[0].id) {
+        count++;
+        setState(() {});
+      }
+    }
     return Scaffold(
       floatingActionButton: Visibility(
         visible: cartVisible,
@@ -160,7 +175,7 @@ class _RestDetailsState extends State<RestDetails> {
                       shape: BoxShape.circle,
                     ),
                     child: Text(
-                      '${cart.length}',
+                      '$count',
                       style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w700),
                     ),
                   ),
